@@ -20,4 +20,5 @@
 .TransactionHistory td:first-child {
   padding-left: 10%;
   text-align: left;
+  text-transform: capitalize;
 }
