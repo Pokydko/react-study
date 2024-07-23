@@ -1,25 +1,73 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
-import userData from "./userData.json";
-import Profile from "./components/Profile/Profile";
-import friends from "./friends.json";
-import FriendList from "./components/FriendList/FriendList";
-import transactions from "./transactions.json";
-import TransactionHistory from "./components/TransactionHistory/TransactionHistory";
+import Description from "./components/Description/Description";
+import Options from "./components/Options/Options";
+import Feedback from "./components/Feedback/Feedback";
+import Notification from "./components/Notification/Notification";
+
+const zeroFeedback = {
+  good: 0,
+  neutral: 0,
+  bad: 0,
+};
 
 const App = () => {
+  const [feedbackCounter, setFeedbackCounter] = useState(() => {
+    try {
+      const feedbacksInStorage = JSON.parse(
+        localStorage.getItem("feedback-count")
+      );
+      return feedbacksInStorage === null ? zeroFeedback : feedbacksInStorage;
+    } catch (error) {
+      console.error(
+        "Something went wrong with your browser storage, but we handle it."
+      );
+      return zeroFeedback;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("feedback-count", JSON.stringify(feedbackCounter));
+  });
+
+  let totalFeedback = 0;
+  for (const number of Object.values(feedbackCounter)) totalFeedback += number;
+  const positiveFeedback = Math.round(
+    (feedbackCounter.good / totalFeedback) * 100
+  );
+
+  const updateFeedback = (feedbackType) => {
+    setFeedbackCounter({
+      ...feedbackCounter,
+      [feedbackType]: feedbackCounter[feedbackType] + 1,
+    });
+  };
+  const resetFeedback = () => {
+    setFeedbackCounter(zeroFeedback);
+  };
+
   return (
-    <>
-      <Profile
-        name={userData.username}
-        tag={userData.tag}
-        location={userData.location}
-        image={userData.avatar}
-        stats={userData.stats}
+    <section className="feedback">
+      <Description title="Sip Happens Café">
+        Please leave your feedback about our service by selecting one of the
+        options below.
+      </Description>
+      <Options
+        totalFeedback={totalFeedback}
+        updateFeedback={updateFeedback}
+        resetFeedback={resetFeedback}
+        buttons={["Good", "Neutral", "Bad"]}
       />
-      <FriendList friends={friends} />
-      <TransactionHistory items={transactions} />
-    </>
+      {totalFeedback === 0 ? (
+        <Notification message="No feedback yet" />
+      ) : (
+        <Feedback
+          states={feedbackCounter}
+          totalFeedback={totalFeedback}
+          positiveFeedback={positiveFeedback}
+        />
+      )}
+    </section>
   );
 };
 
