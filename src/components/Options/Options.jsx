@@ -7,6 +7,7 @@ const Options = ({ totalFeedback, updateFeedback, resetFeedback, buttons }) => {
         return (
           <button
             key={buttonName}
+            className={css.controlsBtn}
             onClick={() => updateFeedback(buttonName.toLowerCase())}
           >
             {buttonName}
@@ -14,7 +15,7 @@ const Options = ({ totalFeedback, updateFeedback, resetFeedback, buttons }) => {
         );
       })}
       {totalFeedback > 0 && (
-        <button key="Reset" onClick={resetFeedback}>
+        <button key="Reset" className={css.controlsBtn} onClick={resetFeedback}>
           Reset
         </button>
       )}
