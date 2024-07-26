@@ -1,4 +1,5 @@
 .TransactionHistory {
+  text-align: center;
   width: 100%;
   margin-bottom: 30px;
   border-collapse: collapse;
@@ -20,4 +21,14 @@
 .TransactionHistory td:first-child {
   padding-left: 10%;
   text-align: left;
+  text-transform: capitalize;
+}
+
+@media only screen and (max-width: 525px){
+  .TransactionHistory {
+    font-size: 10px;
+  }
+.TransactionHistory td:first-child {
+    padding-left: 8%;
+  }
 }

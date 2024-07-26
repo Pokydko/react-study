@@ -1,0 +1,60 @@
+.card {
+  overflow: hidden;
+  text-align: center;
+  width: 350px;
+  margin: 30px auto;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: #fafafa;
+  color: black;
+  font-size: 27px;
+  line-height: 1.5;
+}
+
+.topOfCard {
+  padding: 10px 0;
+}
+
+.avatar {
+  width: 135px;
+  margin-bottom: 10px;
+  border-radius: 100%;
+  background-color: black;
+}
+
+.name {
+  margin-bottom: 5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.underName {
+  color: gray;
+  font-size: 23px;
+}
+
+.stats {
+  display: flex;
+  border-top: 2px solid grey;
+  background-color: lightgray;
+  font-size: 20px;
+}
+.stats li {
+  width: calc(100% / 3);
+  padding: 15px 0;
+}
+.stats li:not(:last-child) {
+  border-right: 2px solid grey;
+}
+.stats span {
+  display: block;
+}
+.statsCount {
+  font-weight: 600;
+}
+
+@media only screen and (max-width: 350px){
+  .card {
+    width: 100%;
+  }
+}
