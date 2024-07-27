@@ -1,74 +1,78 @@
 import { useState, useEffect } from "react";
+import { nanoid } from "nanoid";
 import "./App.css";
-import Description from "./components/Description/Description";
-import Options from "./components/Options/Options";
-import Feedback from "./components/Feedback/Feedback";
-import Notification from "./components/Notification/Notification";
-
-const zeroFeedback = {
-  good: 0,
-  neutral: 0,
-  bad: 0,
-};
+import ContactForm from "./components/ContactForm/ContactForm.jsx";
+import SearchBox from "./components/SearchBox/SearchBox.jsx";
+import ContactList from "./components/ContactList/ContactList.jsx";
+import defaultBase from "./Data/contacts.json";
 
 const App = () => {
-  const [feedbackCounter, setFeedbackCounter] = useState(() => {
-    try {
-      const feedbacksInStorage = JSON.parse(
-        localStorage.getItem("feedback-count")
-      );
-      return feedbacksInStorage === null ? zeroFeedback : feedbacksInStorage;
-    } catch (error) {
-      console.error(
-        "Something went wrong with your browser storage, but we handle it."
-      );
-      return zeroFeedback;
-    }
-  });
+  const [contactsBase, setContactBase] = useState(initializeBase());
+  const [visibleContacts, setVisibleContacts] = useState(contactsBase);
+  const [searchRequest, setSearchRequest] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("feedback-count", JSON.stringify(feedbackCounter));
-  });
+    localStorage.setItem("storageBase", JSON.stringify(contactsBase));
+  }, [contactsBase]);
 
-  let totalFeedback = 0;
-  for (const number of Object.values(feedbackCounter)) totalFeedback += number;
-  const positiveFeedback = Math.round(
-    (feedbackCounter.good / totalFeedback) * 100
-  );
+  useEffect(() => {
+    setVisibleContacts(
+      contactsBase.filter(
+        ({ name, number }) =>
+          name.toLowerCase().includes(searchRequest.toLowerCase()) ||
+          number.includes(searchRequest)
+      )
+    );
+  }, [searchRequest, contactsBase]);
 
-  const updateFeedback = (feedbackType) => {
-    setFeedbackCounter({
-      ...feedbackCounter,
-      [feedbackType]: feedbackCounter[feedbackType] + 1,
-    });
+  const addContact = (newContact) => {
+    newContact.id = nanoid();
+    setContactBase((currentBase) => [...currentBase, newContact]);
   };
-  const resetFeedback = () => {
-    setFeedbackCounter(zeroFeedback);
+
+  const deleteContact = (deletedId) => {
+    setContactBase((currentBase) =>
+      currentBase.filter(({ id }) => id !== deletedId)
+    );
   };
 
   return (
-    <section className="feedback">
-      <Description title="Sip Happens Café">
-        Please leave your feedback about our service by selecting one of the
-        options below.
-      </Description>
-      <Options
-        totalFeedback={totalFeedback}
-        updateFeedback={updateFeedback}
-        resetFeedback={resetFeedback}
-        buttons={["Good", "Neutral", "Bad"]}
+    <div>
+      <h1>Phonebook</h1>
+      <ContactForm addContact={addContact} />
+      <SearchBox setSearchRequest={setSearchRequest} />
+      <ContactList
+        visibleContacts={visibleContacts}
+        deleteContact={deleteContact}
       />
-      {totalFeedback === 0 ? (
-        <Notification message="No feedback yet" />
-      ) : (
-        <Feedback
-          states={feedbackCounter}
-          totalFeedback={totalFeedback}
-          positiveFeedback={positiveFeedback}
-        />
-      )}
-    </section>
+    </div>
   );
 };
 
 export default App;
+
+function initializeBase() {
+  try {
+    const storageBase = JSON.parse(localStorage.getItem("storageBase"));
+    if (storageBase && storageBase.length === 0) {
+      console.info(
+        "It seems you delete everything from Base. If you reload page with empty Base - it'll initialize by default"
+      );
+      return defaultBase;
+    }
+    return storageBase ?? defaultBase;
+  } catch (error) {
+    console.info("localStorage error, initialization from default Base");
+    return defaultBase;
+  }
+}
+
+setTimeout(() => {
+  const root = document.querySelector(":root");
+  document.querySelector("h1").addEventListener("click", () => {
+    root.style.colorScheme =
+      root.style.colorScheme === "light dark" ? "light" : "light dark";
+
+    console.log("click");
+  });
+}, 500);

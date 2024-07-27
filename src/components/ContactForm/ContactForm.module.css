@@ -1,0 +1,46 @@
+.form {
+  position: relative;
+  border: 2px solid blue;
+  border-radius: 5px;
+  padding: 20px 10px;
+  margin-bottom: 30px;
+  width: 400px;
+}
+.form:hover,
+.form:focus-within {
+  border-color: orange;
+}
+
+.field {
+  width: 100%;
+  background-color: transparent;
+  border-radius: 2px;
+  height: 35px;
+}
+
+.errorName {
+  position: absolute;
+  font-size: 17px;
+  font-style: italic;
+  color: orangered;
+  left: 115px;
+  top: 21px;
+}
+.errorNumber {
+  position: absolute;
+  font-size: 17px;
+  font-style: italic;
+  color: orangered;
+  left: 115px;
+  top: 96px;
+}
+
+.btnWrap {
+  text-align: center;
+}
+
+@media only screen and (max-width: 450px) {
+  .form {
+    width: 100%;
+  }
+}

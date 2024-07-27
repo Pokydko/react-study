@@ -1,0 +1,27 @@
+.contact {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid blue;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  width: 340px;
+  line-height: 1.8;
+}
+
+span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.name svg {
+  height: 22px;
+  width: 22px;
+}
+
+@media only screen and (max-width: 767px) {
+  .contact {
+    width: 100%;
+    padding: 2% 5%;
+  }
+}
