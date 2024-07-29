@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
-import css from './Module3.module.css';
-import ContactForm from '../components/ContactForm/ContactForm.jsx';
-import SearchBox from '../components/SearchBox/SearchBox.jsx';
-import ContactList from '../components/ContactList/ContactList.jsx';
-import defaultBase from '../data/contacts.json';
+import { useState, useEffect } from "react";
+import { nanoid } from "nanoid";
+import css from "./Module3.module.css";
+import ContactForm from "../components/ContactForm/ContactForm.jsx";
+import SearchBox from "../components/SearchBox/SearchBox.jsx";
+import ContactList from "../components/ContactList/ContactList.jsx";
+import defaultBase from "../data/contacts.json";
 
 const App = () => {
   const [contactsBase, setContactBase] = useState(initializeBase());
   const [visibleContacts, setVisibleContacts] = useState(contactsBase);
-  const [searchRequest, setSearchRequest] = useState('');
+  const [searchRequest, setSearchRequest] = useState("");
 
   useEffect(() => {
-    localStorage.setItem('storageBase', JSON.stringify(contactsBase));
+    localStorage.setItem("storageBase", JSON.stringify(contactsBase));
   }, [contactsBase]);
 
   useEffect(() => {
@@ -26,25 +26,26 @@ const App = () => {
   }, [searchRequest, contactsBase]);
 
   useEffect(() => {
-    const root = document.querySelector(':root');
+    const root = document.querySelector(":root");
     const changeTheme = () => {
       root.style.colorScheme =
-        root.style.colorScheme === 'dark' ? 'light' : 'dark';
-      console.info('Change black/white theme by tapping PhonebookTitle');
+        root.style.colorScheme === "dark" ? "light" : "dark";
+      console.info("Change black/white theme by tapping PhonebookTitle");
     };
 
     setTimeout(() => {
       document
-        .getElementById('PhonebookTitle')
-        .addEventListener('click', changeTheme);
-    }, 1);
+        .getElementById("PhonebookTitle")
+        .addEventListener("click", changeTheme);
+    }, 500);
 
     return () => {
       setTimeout(() => {
-        console.log('removeEventListener from PhonebookTitle');
-        document
-          .getElementById('PhonebookTitle')
-          .removeEventListener('click', changeTheme);
+        console.log("Tap on PhonebookTitle - change black/white");
+        if (document.getElementById("PhonebookTitle"))
+          document
+            .getElementById("PhonebookTitle")
+            .removeEventListener("click", changeTheme);
       }, 500);
     };
   }, []);
@@ -62,7 +63,7 @@ const App = () => {
 
   return (
     <div className={css.feedbakApp}>
-      <h2 className={css.title} id='PhonebookTitle'>
+      <h2 className={css.title} id="PhonebookTitle">
         Phonebook
       </h2>
       <ContactForm addContact={addContact} />
@@ -78,7 +79,7 @@ export default App;
 
 function initializeBase() {
   try {
-    const storageBase = JSON.parse(localStorage.getItem('storageBase'));
+    const storageBase = JSON.parse(localStorage.getItem("storageBase"));
     if (storageBase && storageBase.length === 0) {
       console.info(
         "It seems you delete everything from Base. If you reload page with empty Base - it'll initialize by default"
@@ -87,7 +88,7 @@ function initializeBase() {
     }
     return storageBase ?? defaultBase;
   } catch (error) {
-    console.info('localStorage error, initialization from default Base');
+    console.info("localStorage error, initialization from default Base");
     return defaultBase;
   }
 }
