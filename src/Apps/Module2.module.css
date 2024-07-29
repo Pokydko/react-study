@@ -1,1 +1,9 @@
+.feedback {
+      max-width: 695px;
+margin: 0 auto;
+    line-height: 1.5;
+}
 
+section div {
+    margin-bottom: 10px;
+}

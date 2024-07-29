@@ -1,6 +1,5 @@
 .card {
   overflow: hidden;
-  text-align: center;
   width: 350px;
   margin: 30px auto;
   border: 2px solid black;
@@ -9,6 +8,7 @@
   color: black;
   font-size: 27px;
   line-height: 1.5;
+  text-align: center;
 }
 
 .topOfCard {
@@ -53,7 +53,7 @@
   font-weight: 600;
 }
 
-@media only screen and (max-width: 350px){
+@media only screen and (max-width: 395px) {
   .card {
     width: 100%;
   }
