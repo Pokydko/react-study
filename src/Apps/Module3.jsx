@@ -4,10 +4,12 @@ import css from "./Module3.module.css";
 import ContactForm from "../components/ContactForm/ContactForm.jsx";
 import SearchBox from "../components/SearchBox/SearchBox.jsx";
 import ContactList from "../components/ContactList/ContactList.jsx";
-// import defaultBase from "../data/contacts.json";
+import defaultBase from "../data/contacts.json";
 
 const App = () => {
-  const [contactsBase, setContactBase] = useState(initializeBase());
+  const [contactsBase, setContactBase] = useState(
+    fromLocalStorage("storageBase", defaultBase)
+  );
   const [visibleContacts, setVisibleContacts] = useState(contactsBase);
   const [searchRequest, setSearchRequest] = useState("");
 
@@ -25,30 +27,7 @@ const App = () => {
     );
   }, [searchRequest, contactsBase]);
 
-  useEffect(() => {
-    const root = document.querySelector(":root");
-    const changeTheme = () => {
-      root.style.colorScheme =
-        root.style.colorScheme === "dark" ? "light" : "dark";
-      console.info("Change black/white theme by tapping PhonebookTitle");
-    };
-
-    setTimeout(() => {
-      document
-        .getElementById("PhonebookTitle")
-        .addEventListener("click", changeTheme);
-    }, 500);
-
-    return () => {
-      setTimeout(() => {
-        console.log("Tap on PhonebookTitle - change black/white");
-        if (document.getElementById("PhonebookTitle"))
-          document
-            .getElementById("PhonebookTitle")
-            .removeEventListener("click", changeTheme);
-      }, 500);
-    };
-  }, []);
+  useEffect(() => clickToBlack("h2"), []);
 
   const addContact = (newContact) => {
     newContact.id = nanoid();
@@ -77,20 +56,40 @@ const App = () => {
 };
 export default App;
 
-function initializeBase() {
+function fromLocalStorage(key, startingState) {
   try {
-    const storageBase = JSON.parse(localStorage.getItem("storageBase"));
-    if (storageBase && storageBase.length === 0) {
+    const inStorage = JSON.parse(localStorage.getItem(key));
+    if (inStorage && inStorage.length === 0) {
       console.info(
         "It seems you delete everything from Base. If you reload page with empty Base - it'll initialize by default"
       );
-      // return defaultBase;
-      return [];
+      return startingState;
     }
-    return storageBase ?? [];
+    return inStorage === null ? startingState : inStorage;
   } catch (error) {
-    console.info("localStorage error, initialization from default Base");
-    // return defaultBase;
-    return [];
+    console.error(
+      "Something went wrong with your browser storage, but we handle it."
+    );
+    return startingState;
   }
+}
+
+function clickToBlack(tag) {
+  const root = document.querySelector(":root");
+  const changeTheme = () => {
+    root.style.colorScheme =
+      root.style.colorScheme === "dark" ? "light" : "dark";
+    console.info("Change black/white theme (tap on Title)");
+  };
+
+  setTimeout(() => {
+    document.querySelector(tag).addEventListener("click", changeTheme);
+  }, 500);
+
+  return () => {
+    setTimeout(() => {
+      if (document.querySelector(tag))
+        document.querySelector(tag).removeEventListener("click", changeTheme);
+    }, 500);
+  };
 }
