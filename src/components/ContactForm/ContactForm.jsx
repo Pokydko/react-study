@@ -44,7 +44,7 @@ const ContactForm = ({ addContact }) => {
             className={css.field}
           ></Field>
           <ErrorMessage
-            className={css.errorName}
+            className={css.errorMessage}
             name="name"
             component="span"
           />
@@ -58,7 +58,7 @@ const ContactForm = ({ addContact }) => {
             className={css.field}
           ></Field>
           <ErrorMessage
-            className={css.errorNumber}
+            className={css.errorMessage}
             name="number"
             component="span"
           />

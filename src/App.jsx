@@ -4,10 +4,12 @@ import "./App.css";
 import ContactForm from "./components/ContactForm/ContactForm.jsx";
 import SearchBox from "./components/SearchBox/SearchBox.jsx";
 import ContactList from "./components/ContactList/ContactList.jsx";
-import defaultBase from "./Data/contacts.json";
+import defaultBase from "./data/contacts.json";
 
 const App = () => {
-  const [contactsBase, setContactBase] = useState(initializeBase());
+  const [contactsBase, setContactBase] = useState(
+    fromLocalStorage("storageBase", defaultBase)
+  );
   const [visibleContacts, setVisibleContacts] = useState(contactsBase);
   const [searchRequest, setSearchRequest] = useState("");
 
@@ -25,6 +27,8 @@ const App = () => {
     );
   }, [searchRequest, contactsBase]);
 
+  useEffect(() => clickToBlack("h1"), []);
+
   const addContact = (newContact) => {
     newContact.id = nanoid();
     setContactBase((currentBase) => [...currentBase, newContact]);
@@ -38,7 +42,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Phonebook</h1>
+      <h1 className="title">Phonebook</h1>
       <ContactForm addContact={addContact} />
       <SearchBox setSearchRequest={setSearchRequest} />
       <ContactList
@@ -51,28 +55,40 @@ const App = () => {
 
 export default App;
 
-function initializeBase() {
+function fromLocalStorage(key, startingState) {
   try {
-    const storageBase = JSON.parse(localStorage.getItem("storageBase"));
-    if (storageBase && storageBase.length === 0) {
+    const inStorage = JSON.parse(localStorage.getItem(key));
+    if (inStorage && inStorage.length === 0) {
       console.info(
         "It seems you delete everything from Base. If you reload page with empty Base - it'll initialize by default"
       );
-      return defaultBase;
+      return startingState;
     }
-    return storageBase ?? defaultBase;
+    return inStorage === null ? startingState : inStorage;
   } catch (error) {
-    console.info("localStorage error, initialization from default Base");
-    return defaultBase;
+    console.error(
+      "Something went wrong with your browser storage, but we handle it."
+    );
+    return startingState;
   }
 }
 
-setTimeout(() => {
+function clickToBlack(tag) {
   const root = document.querySelector(":root");
-  document.querySelector("h1").addEventListener("click", () => {
+  const changeTheme = () => {
     root.style.colorScheme =
-      root.style.colorScheme === "light dark" ? "light" : "light dark";
+      root.style.colorScheme === "dark" ? "light" : "dark";
+    console.info("Change black/white theme (tap on Title)");
+  };
 
-    console.log("click");
-  });
-}, 500);
+  setTimeout(() => {
+    document.querySelector(tag).addEventListener("click", changeTheme);
+  }, 500);
+
+  return () => {
+    setTimeout(() => {
+      if (document.querySelector(tag))
+        document.querySelector(tag).removeEventListener("click", changeTheme);
+    }, 500);
+  };
+}

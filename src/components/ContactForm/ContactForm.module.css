@@ -1,10 +1,9 @@
 .form {
-  position: relative;
+  width: 400px;
+  margin-bottom: 30px;
+  padding: 20px 10px;
   border: 2px solid blue;
   border-radius: 5px;
-  padding: 20px 10px;
-  margin-bottom: 30px;
-  width: 400px;
 }
 .form:hover,
 .form:focus-within {
@@ -13,26 +12,22 @@
 
 .field {
   width: 100%;
-  background-color: transparent;
-  border-radius: 2px;
   height: 35px;
+  border-radius: 2px;
+  background-color: transparent;
 }
 
-.errorName {
-  position: absolute;
-  font-size: 17px;
-  font-style: italic;
-  color: orangered;
-  left: 115px;
-  top: 21px;
+label {
+  position: relative;
 }
-.errorNumber {
+
+.errorMessage {
   position: absolute;
-  font-size: 17px;
-  font-style: italic;
-  color: orangered;
+  top: 0;
   left: 115px;
-  top: 96px;
+  color: orangered;
+  font-style: italic;
+  font-size: 17px;
 }
 
 .btnWrap {

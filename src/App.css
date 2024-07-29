@@ -1,13 +1,24 @@
 #root {
-  padding: 2% 5%;
   margin: 0 auto;
+  padding: 2% 5%;
 }
 
-div h1 {
+.title {
   margin-top: 30px;
   margin-bottom: 30px;
+  font-size: xx-large;
 }
 
 input {
   border-radius: 3px;
+}
+
+.feedbakApp{
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 1400px) {
+.feedbakApp{
+  max-width: 85%;
+}  
 }
