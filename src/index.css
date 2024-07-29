@@ -3,7 +3,7 @@
   color: rgba(255, 255, 255, 0.87); */
   font-weight: 400;
   font-family: sans-serif;
-  line-height: 1.5;
+  line-height: 1;
   letter-spacing: 0.03em;
 
   /* color-scheme: light dark; */
@@ -14,12 +14,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
 body {
-  line-height: 2;
-  /* display: flex;
+  display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh; */
+  min-height: 100vh;
+  margin: 0;
 }
 
 h1,
@@ -46,5 +52,6 @@ img {
 }
 
 button {
+  min-height: 32px;
   cursor: pointer;
 }
