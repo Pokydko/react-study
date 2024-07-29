@@ -12,23 +12,15 @@ const zeroFeedback = {
 };
 
 const FeedbackSection = () => {
-  const [feedbackCounter, setFeedbackCounter] = useState(() => {
-    try {
-      const feedbacksInStorage = JSON.parse(
-        localStorage.getItem("feedback-count")
-      );
-      return feedbacksInStorage === null ? zeroFeedback : feedbacksInStorage;
-    } catch (error) {
-      console.error(
-        "Something went wrong with your browser storage, but we handle it."
-      );
-      return zeroFeedback;
-    }
-  });
+  const [feedbackCounter, setFeedbackCounter] = useState(
+    fromLocalStorage("feedback-count", zeroFeedback)
+  );
 
   useEffect(() => {
     localStorage.setItem("feedback-count", JSON.stringify(feedbackCounter));
   });
+
+  useEffect(() => clickToBlack("h2"), []);
 
   let totalFeedback = 0;
   for (const number of Object.values(feedbackCounter)) totalFeedback += number;
@@ -70,5 +62,36 @@ const FeedbackSection = () => {
     </section>
   );
 };
-
 export default FeedbackSection;
+
+function clickToBlack(tag) {
+  const root = document.querySelector(":root");
+  const changeTheme = () => {
+    root.style.colorScheme =
+      root.style.colorScheme === "dark" ? "light" : "dark";
+    console.info("Change black/white theme (tap on Title)");
+  };
+
+  setTimeout(() => {
+    document.querySelector(tag).addEventListener("click", changeTheme);
+  }, 500);
+
+  return () => {
+    setTimeout(() => {
+      if (document.querySelector(tag))
+        document.querySelector(tag).removeEventListener("click", changeTheme);
+    }, 500);
+  };
+}
+
+function fromLocalStorage(key, startingState) {
+  try {
+    const inStorage = JSON.parse(localStorage.getItem(key));
+    return inStorage === null ? startingState : inStorage;
+  } catch (error) {
+    console.error(
+      "Something went wrong with your browser storage, but we handle it."
+    );
+    return startingState;
+  }
+}
