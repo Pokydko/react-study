@@ -20,7 +20,7 @@ const FeedbackSection = () => {
     localStorage.setItem("feedback-count", JSON.stringify(feedbackCounter));
   });
 
-  useEffect(() => clickToBlack("h2"), []);
+  useEffect(() => clickToBlackById("Sip Happens Café"), []);
 
   let totalFeedback = 0;
   for (const number of Object.values(feedbackCounter)) totalFeedback += number;
@@ -64,7 +64,7 @@ const FeedbackSection = () => {
 };
 export default FeedbackSection;
 
-function clickToBlack(tag) {
+function clickToBlackById(ID) {
   const root = document.querySelector(":root");
   const changeTheme = () => {
     root.style.colorScheme =
@@ -73,13 +73,13 @@ function clickToBlack(tag) {
   };
 
   setTimeout(() => {
-    document.querySelector(tag).addEventListener("click", changeTheme);
+    document.getElementById(ID).addEventListener("click", changeTheme);
   }, 500);
 
   return () => {
     setTimeout(() => {
-      if (document.querySelector(tag))
-        document.querySelector(tag).removeEventListener("click", changeTheme);
+      if (document.getElementById(ID))
+        document.getElementById(ID).removeEventListener("click", changeTheme);
     }, 500);
   };
 }
