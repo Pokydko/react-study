@@ -4,7 +4,7 @@ import css from "./Module3.module.css";
 import ContactForm from "../components/ContactForm/ContactForm.jsx";
 import SearchBox from "../components/SearchBox/SearchBox.jsx";
 import ContactList from "../components/ContactList/ContactList.jsx";
-import defaultBase from "../data/contacts.json";
+// import defaultBase from "../data/contacts.json";
 
 const App = () => {
   const [contactsBase, setContactBase] = useState(initializeBase());
@@ -84,11 +84,13 @@ function initializeBase() {
       console.info(
         "It seems you delete everything from Base. If you reload page with empty Base - it'll initialize by default"
       );
-      return defaultBase;
+      // return defaultBase;
+      return [];
     }
-    return storageBase ?? defaultBase;
+    return storageBase ?? [];
   } catch (error) {
     console.info("localStorage error, initialization from default Base");
-    return defaultBase;
+    // return defaultBase;
+    return [];
   }
 }
