@@ -1,79 +1,110 @@
-import { useState, useEffect } from "react";
-import { nanoid } from "nanoid";
-import "./App.css";
-import ContactForm from "./components/ContactForm/ContactForm.jsx";
-import SearchBox from "./components/SearchBox/SearchBox.jsx";
-import ContactList from "./components/ContactList/ContactList.jsx";
-import defaultBase from "./data/contacts.json";
+import { useState, useRef } from "react";
+import toast from "react-hot-toast";
+import RingLoader from "react-spinners/RingLoader";
+import css from "./App.module.css";
+import unsplashApi from "./unsplash-my-api";
+
+import SearchBar from "./components/SearchBar/SearchBar";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import ImageModal from "./components/ImageModal/ImageModal";
 
 const App = () => {
-  const [contactsBase, setContactBase] = useState(
-    fromLocalStorage("storageBase", defaultBase)
-  );
-  const [visibleContacts, setVisibleContacts] = useState(contactsBase);
-  const [searchRequest, setSearchRequest] = useState("");
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [isThereMore, setIsThereMore] = useState(false);
+  const current_page = useRef(1);
+  const userRequest = useRef("");
 
-  useEffect(() => {
-    localStorage.setItem("storageBase", JSON.stringify(contactsBase));
-  }, [contactsBase]);
+  const [picture, setPicture] = useState({});
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  useEffect(() => {
-    setVisibleContacts(
-      contactsBase.filter(
-        ({ name, number }) =>
-          name.toLowerCase().includes(searchRequest.toLowerCase()) ||
-          number.includes(searchRequest)
-      )
-    );
-  }, [searchRequest, contactsBase]);
-
-  useEffect(() => clickToBlack("h1"), []);
-
-  const addContact = (newContact) => {
-    newContact.id = nanoid();
-    setContactBase((currentBase) => [...currentBase, newContact]);
+  const onSubmit = (firstRequest = false, request) => {
+    setLoading(true);
+    setError(false);
+    setIsThereMore(false);
+    if (firstRequest) {
+      setPhotos([]);
+      current_page.current = 1;
+      userRequest.current = request;
+    } else {
+      current_page.current += 1;
+    }
+    unsplashApi(userRequest.current, current_page.current, 30)
+      .then(({ data }) => {
+        if (firstRequest) setPhotos(data.results);
+        else setPhotos(photos.concat(data.results));
+        checkEmptyReply(data.results);
+        if (data.total_pages > current_page.current) setIsThereMore(true);
+        else
+          toast.custom(
+            <span className={`${css.toast} ${css.toastEnd}`}>
+              🎸more, 🎸more... no more... of that jazz
+            </span>
+          );
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+        setError(true);
+      })
+      .finally(() => {
+        setTimeout(() => setLoading(false), 2000);
+      });
   };
 
-  const deleteContact = (deletedId) => {
-    setContactBase((currentBase) =>
-      currentBase.filter(({ id }) => id !== deletedId)
-    );
+  const viewInModal = (e) => {
+    setPicture(e);
+    setModalIsOpen(true);
   };
 
   return (
-    <div>
-      <h1 className="title">Phonebook</h1>
-      <ContactForm addContact={addContact} />
-      <SearchBox setSearchRequest={setSearchRequest} />
-      <ContactList
-        visibleContacts={visibleContacts}
-        deleteContact={deleteContact}
+    <>
+      <SearchBar onSubmit={onSubmit} />
+      {photos.length > 0 && (
+        <ImageGallery photos={photos} viewInModal={viewInModal} />
+      )}
+      {error && (
+        <ErrorMessage>
+          Something went wrong.{" "}
+          <a className={css.link} href="/">
+            Reload the page
+          </a>
+          , please.
+        </ErrorMessage>
+      )}
+      {isThereMore && <LoadMoreBtn onSubmit={onSubmit} />}
+      <RingLoader
+        color="#909080ff"
+        size={40}
+        aria-label="Loading Spinner"
+        loading={loading}
+        cssOverride={{
+          margin: "0 auto",
+        }}
       />
-    </div>
+      <ImageModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+        {picture}
+      </ImageModal>
+    </>
   );
 };
-
 export default App;
 
-function fromLocalStorage(key, startingState) {
-  try {
-    const inStorage = JSON.parse(localStorage.getItem(key));
-    if (inStorage && inStorage.length === 0) {
-      console.info(
-        "It seems you delete everything from Base. If you reload page with empty Base - it'll initialize by default"
-      );
-      return startingState;
-    }
-    return inStorage === null ? startingState : inStorage;
-  } catch (error) {
-    console.error(
-      "Something went wrong with your browser storage, but we handle it."
+function checkEmptyReply(arr) {
+  if (arr.length === 0)
+    toast.custom(
+      <span className={css.toast}>
+        🎸Empty spaces, what are we living for? ⌨️Empty replies, what are we
+        looking for?
+      </span>
     );
-    return startingState;
-  }
 }
 
-function clickToBlack(tag) {
+// clickToBlackId("blackWhite");
+function clickToBlackId(id) {
   const root = document.querySelector(":root");
   const changeTheme = () => {
     root.style.colorScheme =
@@ -82,13 +113,13 @@ function clickToBlack(tag) {
   };
 
   setTimeout(() => {
-    document.querySelector(tag).addEventListener("click", changeTheme);
+    document.getElementById(id).addEventListener("click", changeTheme);
   }, 500);
 
   return () => {
     setTimeout(() => {
-      if (document.querySelector(tag))
-        document.querySelector(tag).removeEventListener("click", changeTheme);
+      if (document.getElementById(id))
+        document.getElementById(id).removeEventListener("click", changeTheme);
     }, 500);
   };
 }

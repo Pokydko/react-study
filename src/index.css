@@ -5,6 +5,7 @@
   font-family: sans-serif;
   line-height: 1;
   letter-spacing: 0.03em;
+  scroll-behavior: smooth;
 
   /* color-scheme: light dark; */
 
@@ -21,10 +22,10 @@
 }
 
 body {
-  display: flex;
+  /* display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100vh; */
   margin: 0;
 }
 
@@ -45,13 +46,29 @@ ol {
   list-style-type: none;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 img {
   display: block;
+  object-fit: cover;
   max-width: 100%;
+  height: 100%;
   margin: 0 auto;
 }
 
 button {
   min-height: 32px;
+  border: transparent;
+  outline: transparent;
   cursor: pointer;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+.ReactModal__Overlay--after-close {
+  opacity: 0;
 }

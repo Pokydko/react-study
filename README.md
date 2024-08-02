@@ -1,3 +1,3 @@
-# GoIT, React + Vite, Task 02:
+# GoIT, React + Vite, Task 04:
 
-Sip Happens Café (віджет відгуків)
+Image finder (Пошук зображень)
