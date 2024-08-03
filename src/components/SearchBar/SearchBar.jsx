@@ -2,7 +2,7 @@ import css from "./SearchBar.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { RxMagnifyingGlass } from "react-icons/rx";
 
-const SearchBar = ({ onSubmit }) => {
+const SearchBar = ({ onSearch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (e.target.userInput.value.trim() === "") {
@@ -13,7 +13,7 @@ const SearchBar = ({ onSubmit }) => {
       );
       return;
     }
-    onSubmit(true, e.target.userInput.value);
+    onSearch(e.target.userInput.value);
   };
   return (
     <header>

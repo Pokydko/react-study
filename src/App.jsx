@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import RingLoader from "react-spinners/RingLoader";
 import css from "./App.module.css";
@@ -15,29 +15,46 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [isThereMore, setIsThereMore] = useState(false);
-  const current_page = useRef(1);
-  const userRequest = useRef("");
+  const [current_page, setCurrent_page] = useState(1);
+  const [userRequest, setUserRequest] = useState("");
 
   const [picture, setPicture] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const onSubmit = (firstRequest = false, request) => {
+  useEffect(() => {
+    const changeTheme = () => {
+      root.style.colorScheme =
+        root.style.colorScheme === "dark" ? "light" : "dark";
+      console.info("Change black/white theme (tap on Title)");
+    };
+    const root = document.querySelector(":root");
+    root
+      .querySelector(`.${css.colorSwitcherBtn}`)
+      .addEventListener("click", changeTheme);
+
+    return () => {
+      if (root.querySelector(`.${css.colorSwitcherBtn}`))
+        root
+          .querySelector(`.${css.colorSwitcherBtn}`)
+          .removeEventListener("click", changeTheme);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (userRequest === "") return;
     setLoading(true);
     setError(false);
     setIsThereMore(false);
-    if (firstRequest) {
-      setPhotos([]);
-      current_page.current = 1;
-      userRequest.current = request;
-    } else {
-      current_page.current += 1;
-    }
-    unsplashApi(userRequest.current, current_page.current, 30)
+
+    unsplashApi({
+      searchRequest: userRequest,
+      searchPage: current_page,
+      perPage: 30,
+    })
       .then(({ data }) => {
-        if (firstRequest) setPhotos(data.results);
-        else setPhotos(photos.concat(data.results));
+        setPhotos(photos.concat(data.results));
         checkEmptyReply(data.results);
-        if (data.total_pages > current_page.current) setIsThereMore(true);
+        if (data.total_pages > current_page) setIsThereMore(true);
         else
           toast.custom(
             <span className={`${css.toast} ${css.toastEnd}`}>
@@ -53,6 +70,16 @@ const App = () => {
       .finally(() => {
         setTimeout(() => setLoading(false), 2000);
       });
+  }, [userRequest, current_page]);
+
+  const onSearch = (userRequest) => {
+    setUserRequest(userRequest);
+    setCurrent_page(1);
+    setPhotos([]);
+  };
+
+  const onLoadMore = () => {
+    setCurrent_page(current_page + 1);
   };
 
   const viewInModal = (e) => {
@@ -62,7 +89,8 @@ const App = () => {
 
   return (
     <>
-      <SearchBar onSubmit={onSubmit} />
+      <div className={css.colorSwitcherBtn}></div>
+      <SearchBar onSearch={onSearch} />
       {photos.length > 0 && (
         <ImageGallery photos={photos} viewInModal={viewInModal} />
       )}
@@ -75,7 +103,7 @@ const App = () => {
           , please.
         </ErrorMessage>
       )}
-      {isThereMore && <LoadMoreBtn onSubmit={onSubmit} />}
+      {isThereMore && <LoadMoreBtn onLoadMore={onLoadMore} />}
       <RingLoader
         color="#909080ff"
         size={40}
@@ -101,25 +129,4 @@ function checkEmptyReply(arr) {
         looking for?
       </span>
     );
-}
-
-// clickToBlackId("blackWhite");
-function clickToBlackId(id) {
-  const root = document.querySelector(":root");
-  const changeTheme = () => {
-    root.style.colorScheme =
-      root.style.colorScheme === "dark" ? "light" : "dark";
-    console.info("Change black/white theme (tap on Title)");
-  };
-
-  setTimeout(() => {
-    document.getElementById(id).addEventListener("click", changeTheme);
-  }, 500);
-
-  return () => {
-    setTimeout(() => {
-      if (document.getElementById(id))
-        document.getElementById(id).removeEventListener("click", changeTheme);
-    }, 500);
-  };
 }
