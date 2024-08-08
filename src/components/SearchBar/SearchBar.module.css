@@ -1,17 +1,26 @@
-form {
-  position: relative;
-  overflow: hidden;
-  width: fit-content;
+.formWrap {
+  position: sticky;
+  top: 7px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 0;
   margin: 0 auto;
   padding: 4px 0;
-  border-radius: 20px;
+}
+
+form {
+  position: relative;
 }
 
 input {
   min-width: 243px;
   height: 30px;
+
   padding-left: 25px;
   border: transparent;
+  border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.534);
   outline: transparent;
 }
@@ -24,7 +33,6 @@ input {
   justify-content: center;
   align-items: center;
   width: 28px;
-  height: 37px;
   padding: 0;
   border: transparent;
   background-color: transparent;
@@ -37,11 +45,19 @@ input {
 }
 
 .toast {
-  padding: 30px;
-  border-radius: 10px;
   position: absolute;
   top: 20px;
-  color: white;
+  padding: 30px;
+  border-radius: 10px;
   background-color: rgba(128, 128, 128, 0.271);
+  color: white;
   backdrop-filter: blur(10px);
+}
+
+@media only screen and (max-width: 767px) {
+  .formWrap {
+    top: 52px;
+    width: 100%;
+    background-color: #0d253f;
+  }
 }

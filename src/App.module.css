@@ -1,3 +1,19 @@
+body {
+  padding: 20px;
+  padding-top: 80px;
+  background-color: #0d253f;
+  color: white;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 2px solid grey;
+  background-color: #0d253f;
+}
+
 .colorSwitcherBtn {
   position: fixed;
   top: 0;
@@ -8,29 +24,36 @@
 }
 
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   border-bottom: 2px solid grey;
-  background-image: linear-gradient(rgba(0, 0, 255, 0.651), rgb(32, 21, 153));
+  background-color: #0d253f;
 }
 
-body {
-  background-color: rgba(108, 108, 158, 0.562);
+h1,
+h2 {
+  text-align: center;
 }
 
-.toast {
-  position: absolute;
+footer .logo {
+  position: fixed;
   top: 20px;
-  padding: 30px;
-  border-radius: 40px;
-  background-color: rgba(105, 67, 67, 0.271);
-  color: white;
-  backdrop-filter: blur(4px);
+  right: 20px;
+  width: 150px;
+  height: 12px;
+  background-color: #0d253f;
+  background-image: url("./img/tmdb_blue_long.svg");
+  background-repeat: no-repeat;
 }
 
-.toastEnd {
-  background-color: rgba(214, 58, 58, 0.271);
-}
-
-.link {
-  text-decoration: underline;
+@media only screen and (max-width: 450px) {
+  footer .logo {
+    top: unset;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-position: center, 10px;
+  }
 }

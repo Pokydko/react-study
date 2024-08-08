@@ -1,0 +1,8 @@
+.mainInfo,
+.additionInfo {
+  border-bottom: 2px solid yellow;
+}
+
+.mainInfo {
+  display: flex;
+}

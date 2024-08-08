@@ -16,21 +16,21 @@ const SearchBar = ({ onSearch }) => {
     onSearch(e.target.userInput.value);
   };
   return (
-    <header>
+    <div className={css.formWrap}>
       <form onSubmit={handleSubmit}>
         <input
           name="userInput"
           type="text"
           autoComplete="off"
           autoFocus
-          placeholder="Search images and photos"
+          placeholder="Search movies"
         />
         <button className={css.searchBtn} type="submit">
           <RxMagnifyingGlass />
         </button>
         <Toaster />
       </form>
-    </header>
+    </div>
   );
 };
 export default SearchBar;

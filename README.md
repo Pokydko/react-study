@@ -1,3 +1,3 @@
-# GoIT, React + Vite, Task 04:
+# GoIT, React + Vite, Task 05:
 
-Image finder (Пошук зображень)
+Movies finder
