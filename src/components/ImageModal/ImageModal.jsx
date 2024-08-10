@@ -1,25 +1,25 @@
-import css from "./ImageModal.module.css";
+import "./ImageModal.css";
 import Modal from "react-modal";
 
 const ImageModal = ({ isOpen, onClose, children: { href, description } }) => {
   return (
     <Modal
       isOpen={isOpen}
-      overlayClassName={css.modalBackdrop}
-      className={css.modalContent}
+      overlayClassName="modalBackdrop"
+      className="modalContent"
       ariaHideApp={false}
       closeTimeoutMS={500}
       onRequestClose={() => onClose()}
     >
       <div className="pictureWrapper">
-        <img src={href} alt={description} className={css.picture} />
+        <img src={href} alt={description} className="picture" />
 
-        <span className={css.aboutPicture}>{description}</span>
+        <span className="aboutPicture">{description}</span>
       </div>
       <button
         onClick={onClose}
         aria-label="modal window close button"
-        className={css.modalCloseBtn}
+        className="modalCloseBtn"
       >
         &times;
       </button>

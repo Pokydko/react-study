@@ -11,7 +11,7 @@ header {
   left: 0;
   width: 100%;
   border-bottom: 2px solid grey;
-  background-color: #0d253f;
+  background-color: #0d253fc2;
 }
 
 .colorSwitcherBtn {
@@ -21,15 +21,6 @@ header {
   z-index: 11111;
   width: 30px;
   height: 30px;
-}
-
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  border-bottom: 2px solid grey;
-  background-color: #0d253f;
 }
 
 h1,

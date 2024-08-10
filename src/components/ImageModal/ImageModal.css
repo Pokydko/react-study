@@ -12,10 +12,19 @@
 }
 
 .modalContent {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.ReactModal__Overlay--after-open,
+.ReactModal__Content--after-open {
+  opacity: 1;
+}
+.ReactModal__Overlay--after-close,
+.ReactModal__Content--after-close {
+  opacity: 0;
 }
 
 .pictureWrapper {

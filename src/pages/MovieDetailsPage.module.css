@@ -1,8 +1,42 @@
+.goBackLink {
+  position: sticky;
+  top: 60px;
+}
+
 .mainInfo,
 .additionInfo {
   border-bottom: 2px solid yellow;
+  line-height: 1.5;
 }
 
 .mainInfo {
   display: flex;
+  line-height: 3;
+}
+.textDetails {
+  margin-left: 30px;
+}
+.content {
+  color: aqua;
+}
+
+.linkPoster {
+  flex-shrink: 0;
+}
+
+.additionInfo li {
+  margin-left: 7%;
+  list-style-type: circle;
+}
+
+.ganre {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+@media only screen and (max-width: 1023px) {
+  .mainInfo {
+    display: block;
+    line-height: 1.5;
+  }
 }

@@ -66,10 +66,3 @@ button {
   outline: transparent;
   cursor: pointer;
 }
-
-.ReactModal__Overlay--after-open {
-  opacity: 1;
-}
-.ReactModal__Overlay--after-close {
-  opacity: 0;
-}

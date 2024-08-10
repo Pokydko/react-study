@@ -11,16 +11,18 @@ export default async function tmdbApi({ path, searchRequest, page }) {
       Authorization: `Bearer ${api_read_access_token}`,
     },
   };
-  request.params = path.includes("search")
-    ? {
-        query: searchRequest,
-        include_adult: false,
-        page: page,
-      }
-    : {
-        page: page,
-        language: "en-US",
-      };
+  if (path.includes("search")) {
+    request.params = {
+      query: searchRequest,
+      include_adult: false,
+      page: page,
+    };
+  } else if (path.includes("trending")) {
+    request.params = {
+      page: page,
+      language: "en-US",
+    };
+  }
 
   return await axios(request);
 }

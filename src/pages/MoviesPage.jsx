@@ -1,39 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy } from "react";
+import { useSearchParams } from "react-router-dom";
 import SearchBar from "../components/SearchBar/SearchBar";
-import MovieList from "../components/MovieList/MovieList";
+const MovieList = lazy(() => import("../components/MovieList/MovieList"));
 import LoadMoreBtn from "../components/LoadMoreBtn/LoadMoreBtn";
 import toast from "react-hot-toast";
 import RingLoader from "react-spinners/RingLoader";
 import tmdbApi from "../tmdb-api";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
-import ImageModal from "../components/ImageModal/ImageModal";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [isThereMore, setIsThereMore] = useState(false);
-  const [userRequest, setUserRequest] = useState("");
+
+  const [userRequest, setUserRequest] = useSearchParams();
 
   const [current_page, setCurrent_page] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
   useEffect(() => {
-    if (userRequest === "") return;
+    if (!userRequest.get("query")) return;
     setLoading(true);
     setError(false);
     setIsThereMore(false);
 
     tmdbApi({
       path: "search/movie",
-      searchRequest: userRequest,
+      searchRequest: userRequest.get("query"),
       page: current_page,
     })
       .then(({ data }) => {
-        //
-        console.dir(data.results);
-        //
         setMovies(movies.concat(data.results));
         checkEmptyReply(data.results);
         if (data.total_pages > current_page) setIsThereMore(true);
@@ -50,7 +46,7 @@ const Movies = () => {
 
   const onSearch = (userRequest) => {
     setMovies([]);
-    setUserRequest(userRequest);
+    setUserRequest({ query: userRequest });
     setCurrent_page(1);
   };
 
@@ -77,9 +73,6 @@ const Movies = () => {
           margin: "0 auto",
         }}
       />
-      <ImageModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
-        open covers in modal
-      </ImageModal>
     </>
   );
 };
