@@ -1,6 +1,6 @@
 import css from "./App.module.css";
-import { Routes, Route, useLocation } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import RingLoader from "react-spinners/RingLoader";
 
 const Navigation = lazy(() => import("./components/Navigation/Navigation"));

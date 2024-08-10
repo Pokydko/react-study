@@ -1,15 +1,13 @@
-import { Routes, Route, Link } from "react-router-dom";
-import HomePage from "./HomePage";
+import { Link } from "react-router-dom";
+import lookingFor from "../img/404.png";
 
 const NotFound = () => {
   return (
-    <div>
+    <div style={{ textAlign: "center", fontSize: 32 }}>
       <Link to="/">
-        There&#39;s nothing to show (click here to return home)
+        <img src={lookingFor} alt="" />
+        There&#39;s nothing to show (click on actor to return home)
       </Link>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
     </div>
   );
 };

@@ -11,7 +11,7 @@ export default function MovieDetailsPage() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
 
-  const location = useLocation();
+  const [location] = useState(useLocation());
   const backLinkHref = location.state ?? "/movies";
   const [modalContent, setModalContent] = useState(false);
 
@@ -72,18 +72,14 @@ export default function MovieDetailsPage() {
         <p>Additional information</p>
         <ul>
           <li>
-            <Link to={`/movies/${movieId}/cast`}>Cast</Link>
+            <Link to={`cast`}>Cast</Link>
           </li>
           <li>
-            <Link to={`/movies/${movieId}/reviews`}>Reviews</Link>-{" "}
+            <Link to={`reviews`}>Reviews</Link>
           </li>
         </ul>
       </div>
-      <div className="bottomPart">
-        <Outlet
-          poster={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-        ></Outlet>
-      </div>
+      <Outlet />
 
       <ImageModal
         isOpen={modalContent !== false}
