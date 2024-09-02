@@ -1,0 +1,41 @@
+.form {
+  width: 400px;
+  margin-bottom: 30px;
+  padding: 20px 10px;
+  border: 2px solid blue;
+  border-radius: 5px;
+}
+.form:hover,
+.form:focus-within {
+  border-color: orange;
+}
+
+.field {
+  width: 100%;
+  height: 35px;
+  border-radius: 2px;
+  background-color: transparent;
+}
+
+label {
+  position: relative;
+}
+
+.errorMessage {
+  position: absolute;
+  top: 0;
+  left: 115px;
+  color: orangered;
+  font-style: italic;
+  font-size: 17px;
+}
+
+.btnWrap {
+  text-align: center;
+}
+
+@media only screen and (max-width: 450px) {
+  .form {
+    width: 100%;
+  }
+}

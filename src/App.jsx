@@ -1,62 +1,40 @@
-import css from "./App.module.css";
-import { Suspense, lazy } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import RingLoader from "react-spinners/RingLoader";
+import { useEffect } from "react";
+import "./App.css";
+import ContactForm from "./components/ContactForm/ContactForm.jsx";
+import SearchBox from "./components/SearchBox/SearchBox.jsx";
+import ContactList from "./components/ContactList/ContactList.jsx";
 
-const Navigation = lazy(() => import("./components/Navigation/Navigation"));
-const HomePage = lazy(() => import("./pages/HomePage"));
-const MoviesPage = lazy(() => import("./pages/MoviesPage"));
-const MovieDetailsPage = lazy(() => import("./pages/MovieDetailsPage"));
-const MovieCast = lazy(() => import("./components/MovieCast/MovieCast"));
-const MovieReviews = lazy(
-  () => import("./components/MovieReviews/MovieReviews")
-);
-const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-
-export default function App() {
-  const location = useLocation();
+const App = () => {
+  useEffect(() => clickToBlack("h1"), []);
 
   return (
-    <>
-      <header>
-        <Navigation></Navigation>
-      </header>
-      <main>
-        <Suspense
-          fallback={
-            <RingLoader
-              color="#909080ff"
-              size={40}
-              aria-label="Loading Spinner"
-              loading={true}
-              cssOverride={{
-                margin: "0 auto",
-              }}
-            />
-          }
-        >
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/movies" element={<MoviesPage />} />
-            <Route
-              path="/movies/:movieId"
-              state={location}
-              element={<MovieDetailsPage />}
-            >
-              <Route path="cast" state={location} element={<MovieCast />} />
-              <Route
-                path="reviews"
-                state={location}
-                element={<MovieReviews />}
-              />
-            </Route>
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
-      </main>
-      <footer>
-        <div className={css.logo}></div>
-      </footer>
-    </>
+    <div>
+      <h1 className="title">Phonebook</h1>
+      <ContactForm />
+      <SearchBox />
+      <ContactList />
+    </div>
   );
+};
+
+export default App;
+
+function clickToBlack(tag) {
+  const root = document.querySelector(":root");
+  const changeTheme = () => {
+    root.style.colorScheme =
+      root.style.colorScheme === "dark" ? "light" : "dark";
+    console.info("Change black/white theme (tap on Title)");
+  };
+
+  setTimeout(() => {
+    document.querySelector(tag).addEventListener("click", changeTheme);
+  }, 500);
+
+  return () => {
+    setTimeout(() => {
+      if (document.querySelector(tag))
+        document.querySelector(tag).removeEventListener("click", changeTheme);
+    }, 500);
+  };
 }

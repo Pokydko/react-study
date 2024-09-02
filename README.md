@@ -1,5 +1,3 @@
-# GoIT, React + Vite, Task 05: Movies finder
+# GoIT, React (with Redux) + Vite, Task 06:
 
-BDMT - Best Database Movies Timethrough - https://bdmt.vercel.app/
-
-Yes. This is The Best Database Movies Through All The Time.
+Phonebook (Книга контактів)
