@@ -5,10 +5,13 @@ import SearchBox from "./components/SearchBox/SearchBox.jsx";
 import ContactList from "./components/ContactList/ContactList.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContacts } from "./redux/contactsOps.js";
-import { selectContacts } from "./redux/selectors.js";
-
+import { selectIsLoading, selectError } from "./redux/selectors.js";
+import { MutatingDots } from "react-loader-spinner";
+import ErrorMsg from "./components/ErrorMessage/ErrorMessage.jsx";
 const App = () => {
   useEffect(() => clickToBlack("h1"), []);
+  let loading = useSelector(selectIsLoading);
+  let error = useSelector(selectError);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -20,6 +23,20 @@ const App = () => {
       <h1 className="title">Phonebook</h1>
       <ContactForm />
       <SearchBox />
+      {loading && (
+        <MutatingDots
+          visible={true}
+          height="100"
+          width="100"
+          color="#4fa94d"
+          secondaryColor="#4fa94d"
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      )}
+      {error && <ErrorMsg>Something went wrong. </ErrorMsg>}
       <ContactList />
     </div>
   );
