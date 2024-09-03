@@ -3,9 +3,17 @@ import "./App.css";
 import ContactForm from "./components/ContactForm/ContactForm.jsx";
 import SearchBox from "./components/SearchBox/SearchBox.jsx";
 import ContactList from "./components/ContactList/ContactList.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContacts } from "./redux/contactsOps.js";
+import { selectContacts } from "./redux/selectors.js";
 
 const App = () => {
   useEffect(() => clickToBlack("h1"), []);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <div>

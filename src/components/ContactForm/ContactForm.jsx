@@ -2,15 +2,11 @@ import css from "./ContactForm.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 // redux
-import { nanoid } from "@reduxjs/toolkit";
-import { addContact } from "../../redux/contactsSlice";
+import { addContact } from "../../redux/contactsOps";
 import { useDispatch } from "react-redux";
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-
-  const nameFieldId = nanoid();
-  const numberFieldId = nanoid();
 
   const handleAddContact = (values, actions) => {
     dispatch(addContact(values));
@@ -39,12 +35,12 @@ const ContactForm = () => {
       validationSchema={ContactFormSchema}
     >
       <Form className={css.form}>
-        <label htmlFor={nameFieldId}>
+        <label htmlFor="nameFieldId">
           Name
           <Field
             type="text"
             name="name"
-            id={nameFieldId}
+            id="nameFieldId"
             autoComplete="on"
             className={css.field}
           ></Field>
@@ -54,12 +50,12 @@ const ContactForm = () => {
             component="span"
           />
         </label>
-        <label htmlFor={numberFieldId}>
+        <label htmlFor="numberFieldId">
           Number
           <Field
             type="text"
             name="number"
-            id={numberFieldId}
+            id="numberFieldId"
             className={css.field}
           ></Field>
           <ErrorMessage

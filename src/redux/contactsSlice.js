@@ -1,41 +1,58 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
-import defaultBase from "../data/contacts.json";
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchContacts, addContact, deleteContact } from "../redux/contactsOps";
 
 const contactsSlice = createSlice({
   name: "contacts", // Ім'я слайсу
 
   // Початковий стан редюсера слайсу
   initialState: {
-    items: defaultBase,
+    items: [],
+    loading: false,
+    error: null,
   },
-
-  // Об'єкт редюсерів
-  reducers: {
-    addContact: {
-      reducer(state, action) {
+  // Обробка зовнішніх екшенів
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchContacts.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.items = action.payload;
+      })
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(addContact.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
         state.items.push(action.payload);
-      },
-      prepare(contact) {
-        return {
-          payload: {
-            ...contact,
-            id: nanoid(),
-          },
-        };
-      },
-    },
-
-    deleteContact(state, action) {
-      const index = state.items.findIndex(
-        (contact) => contact.id === action.payload
-      );
-      state.items.splice(index, 1);
-    },
+      })
+      .addCase(addContact.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteContact.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.items = state.items.filter(
+          (contact) => contact.id !== action.payload.id
+        );
+      })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
 // Редюсер слайсу
 export default contactsSlice.reducer;
-
-// Генератори екшенів
-export const { addContact, deleteContact } = contactsSlice.actions;
