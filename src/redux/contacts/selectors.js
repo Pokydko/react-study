@@ -1,10 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { selectNameFilter } from "../filters/selectors";
 
 // Функція-селектор для використання в useSelector:
 export const selectContacts = (state) => state.contacts.items; // повертає список контактів з властивості items
-
-// Функція-селектор для використання в useSelector:
-export const selectNameFilter = (state) => state.filters.name; // повертає значення фільтра з властивості name.
 
 export const selectIsLoading = (state) => state.contacts.isLoading;
 

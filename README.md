@@ -1,3 +1,3 @@
-# GoIT, React (with async Redux) + Vite, Task 07:
+# GoIT, React (with async Redux) + Vite, Task 08:
 
-Phonebook (Книга контактів)
+Phonebook with personal cabinet (Книга контактів)
